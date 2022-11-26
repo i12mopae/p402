@@ -8,9 +8,8 @@
 #include <iterator>
 
 
-std::list<UsuarioRegistrado> registrados_list_;
 
-enum class RolType{Administrador, Ccursos, Crecursos, Alumno};
+enum class RolType{Admin, Ccursos, Crecursos, Alumno};
 class UsuarioRegistrado
 {
 private:
@@ -18,13 +17,13 @@ private:
     RolType rol_;
 
 public:
-    UsuarioRegistrado(std::string nombre,
-                      std::string apellidos,
-                      std::string dni,
-                      std::string correo,
-                      std::string usuario,
-                      std::string password,
-                      RolType rol);
+    UsuarioRegistrado(std::string nombre="empty",
+                      std::string apellidos="empty",
+                      std::string dni="empty",
+                      std::string correo="empty",
+                      std::string usuario="empty",
+                      std::string password="empty",
+                      RolType rol=RolType::Alumno);
     // gets
     inline std::string get_nombre() { return nombre_; }
     inline std::string get_apellidos() { return apellidos_; }
@@ -42,6 +41,8 @@ public:
     inline void set_usuario(std::string usuario) { usuario_ = usuario; }
     inline void set_password(std::string password) { password_ = password; }
     inline void set_rol(RolType rol){rol_=rol;}
+
 };
+
 
 #endif

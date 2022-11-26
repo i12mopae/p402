@@ -7,6 +7,14 @@
 #include <vector>
 #include <iterator>
 
+enum Options{
+    Nombre,
+    Descripcion,
+    Ponentes,
+    Duracion,
+    Aforo,
+    Plazas_libres
+};
 class Curso{
     private:
         std::string nombre_;
@@ -45,4 +53,5 @@ class Curso{
     void modifica_curso(std::string nombre);
     void visualiza_cursos();
 };
+Options resolver_switch(std::string aux);
 #endif

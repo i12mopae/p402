@@ -2,7 +2,7 @@
 #define FUNCIONES_H
 
 void login();
-void registrarusu();
+void registrar();
 
 
 

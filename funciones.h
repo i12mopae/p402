@@ -3,8 +3,7 @@
 
 void login();
 void registrar();
-
-
+void mostrar_registrados();
 
 
 #endif

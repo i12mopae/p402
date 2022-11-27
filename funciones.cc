@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <fstream>
 #include "UsuarioRegistrado.h"
 #include "funciones.h"
 
@@ -100,8 +101,8 @@ void registrar()
             std::cout << "\nYa hay una cuenta registrada con este dni.\n";
             system(EXIT_SUCCESS);   
         }
-        else
-        {
+       
+    }
             UsuarioRegistrado nuevo;
             std::cout << "\nNombre: ";
             std::cin >> nombreaux;
@@ -122,6 +123,24 @@ void registrar()
 
             registrados_list_.push_back(nuevo);
             std::cout<<"\nUsuario registrado correctamente.\n";
-        }
-    }
+        
+}
+
+
+void mostrar_registrados(){
+    // std::ofstream fich("registrados.txt");
+    // if (!fich)
+    // {
+    //     std::cout << "Error al abrir registrados.txt\n";
+    //     exit(EXIT_FAILURE);
+    // }
+    for (std::list<UsuarioRegistrado>::iterator i = registrados_list_.begin(); i != registrados_list_.end(); i++)
+    {
+        std::cout<<"\nNombre: "<< i->get_nombre();
+        std::cout<<"\tApellidos: "<< i->get_apellidos();
+        std::cout<<"\tDni: "<< i->get_dni();
+        std::cout<<"\tCorreo: "<< i->get_correo();
+        std::cout<<"\tUsuario: "<< i->get_usuario()<<"\n";
+        
+}
 }

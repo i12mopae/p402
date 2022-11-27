@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include "UsuarioRegistrado.h"
-
+#include "funciones.h"
 int main()
 {
     int opcion;
@@ -16,15 +16,15 @@ int main()
         std::cout << "Opción: ";
         std::cin >> opcion;
 
-        system("cls");
+        system("clear");
 
         switch (opcion)
         {
         case 1:
-            // login();
+            login();
             break;
         case 2:
-            // registrar();
+            registrarusu();
             break;
         case 3:
             // ConsultaCurso();

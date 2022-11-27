@@ -42,6 +42,9 @@ public:
     inline void set_password(std::string password) { password_ = password; }
     inline void set_rol(RolType rol){rol_=rol;}
 
+
+
+
 };
 
 

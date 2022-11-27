@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string.h>
-#include "UsuarioRegistrado.h"
 #include "funciones.h"
+#include "UsuarioRegistrado.h"
 int main()
 {
     int opcion;
     do
     {
-        std::cout << "\t\tBienvenido al programa de cursos de extensión de la uco.\t\t\n\n";
+        std::cout << "\n\t\tBienvenido al programa de cursos de extensión de la UCO.\t\t\n\n";
         std::cout << "Menú:\n";
         std::cout << "\t1. Iniciar sesión\n\n";
         std::cout << "\t2. Registrarse\n\n";
@@ -24,7 +24,7 @@ int main()
             login();
             break;
         case 2:
-            registrarusu();
+            registrar();
             break;
         case 3:
             // ConsultaCurso();

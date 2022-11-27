@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include "UsuarioRegistrado.h"
+#include "funciones.h"
 
 std::list<UsuarioRegistrado> registrados_list_;
 
@@ -18,7 +19,7 @@ void login()
     std::cin >> usuarioaux;
     int opusuario;
 
-    for (auto i = registrados_list_.begin(); i != registrados_list_.end(); i++)
+    for (std::list<UsuarioRegistrado>::iterator i = registrados_list_.begin(); i != registrados_list_.end(); i++)
     {
         if (i->get_usuario() == usuarioaux)
         {
@@ -46,7 +47,7 @@ void login()
             else
             {
                 std::cout << "Acceso inválido, el usuario y la contraseña no coinciden.\n";
-                login();
+                exit(EXIT_FAILURE);
             }
         }
         else
@@ -58,7 +59,7 @@ void login()
                 std::cout << "\t1.Probar otra vez.\n";
                 std::cout << "\t2.Registrarse.\n";
                 std::cout << "\t3.Salir.\n";
-                std::cout << "Opción: \n";
+                std::cout << "Opción: ";
                 std::cin >> opusuario;
                 switch (opusuario)
                 {
@@ -66,11 +67,11 @@ void login()
                     login();
                     break;
                 case 2:
-                    // registrarusu();
+                    registrar();
                 case 3:
                     system(EXIT_SUCCESS);
                 default:
-                    std::cout << "Error, ha introducido una opción no válida.\n";
+                    std::cout << "\nError, ha introducido una opción no válida.\n";
                     break;
                 }
             } while (opusuario != 3);
@@ -78,7 +79,7 @@ void login()
     }
 }
 
-void registrarusu()
+void registrar()
 {
     std::string nombreaux;
     std::string apellidosaux;
@@ -90,54 +91,37 @@ void registrarusu()
     std::cout << "Para registrarse deberá introducir los siguientes datos:\n";
     std::cout << "Dni: ";
     std::cin >> dniaux;
-    int option;
-    for (auto i = registrados_list_.begin(); i != registrados_list_.end(); i++)
+    
+    for (std::list<UsuarioRegistrado>::iterator i = registrados_list_.begin(); i != registrados_list_.end(); i++)
     {
         if (i->get_dni() == dniaux)
         {
-            do
-            {
-                std::cout << "Ya hay una cuenta registrada con este dni.\n";
-                std::cout << "Elija entre las siguientes opciones:\n";
-                std::cout << "\t1.Probar otra vez.\n";
-                std::cout << "\t2.Olvidé mi contraseña\n";
-                std::cout << "\t3.Salir.\n";
-                std::cout << "Opción: \n";
-                std::cin >> option;
-                switch (option)
-                {
-                case 1:
-                    registrarusu();
-                    break;
-                case 2:
-                    // olvidacontra();
-                case 3:
-                    system(EXIT_SUCCESS);
-                }
-            } while (option != 3);
+           
+            std::cout << "\nYa hay una cuenta registrada con este dni.\n";
+            system(EXIT_SUCCESS);   
         }
         else
         {
             UsuarioRegistrado nuevo;
-            nuevo.set_dni(dniaux);
-            std::cout << "Nombre: ";
+            std::cout << "\nNombre: ";
             std::cin >> nombreaux;
             nuevo.set_nombre(nombreaux);
-            std::cout << "Apellidos: ";
+            std::cout << "\nApellidos: ";
             std::cin >> apellidosaux;
             nuevo.set_apellidos(apellidosaux);
-            std::cout << "Correo: ";
+            nuevo.set_dni(dniaux);
+            std::cout << "\nCorreo: ";
             std::cin >> correoaux;
             nuevo.set_correo(correoaux);
-            std::cout << "Usuario: ";
+            std::cout << "\nUsuario: ";
             std::cin >> usuarioaux;
             nuevo.set_usuario(usuarioaux);
-            std::cout << "Contraseña: ";
+            std::cout << "\nContraseña: ";
             std::cin >> passwordaux;
             nuevo.set_password(passwordaux);
 
             registrados_list_.push_back(nuevo);
-
+            std::cout<<"\nUsuario registrado correctamente.\n";
         }
     }
 }

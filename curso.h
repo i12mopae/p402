@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
-
+/*
 enum Options{
     Nombre,
     Descripcion,
@@ -15,6 +15,7 @@ enum Options{
     Aforo,
     Plazas_libres
 };
+*/
 class Curso{
     private:
         std::string nombre_;
@@ -25,12 +26,12 @@ class Curso{
         int plibre_;//plazas libres
         std::list<Curso> lista_curso_;
     public:
-    Curso(std::string nombre,
-        std::string descripcion,
-        std::string ponentes,
-        std::string duracion,
-        int aforo,
-        int plibre);
+    Curso(std::string nombre="empty",
+        std::string descripcion="empty",
+        std::string ponentes="empty",
+        std::string duracion="empty",
+        int aforo=0,
+        int plibre=0);
 
     inline std::string get_nombre(){ return nombre_;}
     inline std::string get_descripcion(){ return descripcion_;}
@@ -53,5 +54,5 @@ class Curso{
     void modifica_curso(std::string nombre);
     void visualiza_cursos();
 };
-Options resolver_switch(std::string aux);
+//Options resolver_switch(std::string aux);
 #endif

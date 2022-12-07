@@ -13,7 +13,7 @@ int main()
         std::cout << "\t2. Registrarse\n\n";
         std::cout << "\t3. Ver cursos\n\n";
         std::cout << "\t4. Ver registrados\n\n";
-        std::cout << "\t4. Salir\n\n";
+        std::cout << "\t5. Salir\n\n";
         std::cout << "Opción: ";
         std::cin >> opcion;
 

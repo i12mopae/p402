@@ -157,6 +157,7 @@ void UsuarioRegistrado::registrar(){
         std::cout<<"Ingresa el correo electrónico: ";
         getline(std::cin, correoaux);
         if(correoaux=="")
+        //QUITARIA EL DO WHILE
             do
             {
                 std::cout<<"Correo no v\240lido!, intentalo nuevamente: ";
@@ -227,9 +228,9 @@ void UsuarioRegistrado::registrar(){
         std::cout<<"\n\n";
 
         escritura<<nombre_<<"\n"<<apellidos_<<"\n"<<dni_<<"\n"<<correo_
-                 <<"\n"<<usuario_<<"\n"<<password_<<"\n";
+                <<"\n"<<usuario_<<"\n"<<password_<<"\n";
 
-       std:: cout<<"El registro se ha completado correctamente.\n\n";
+    std:: cout<<"El registro se ha completado correctamente.\n\n";
     }
 
     else

@@ -6,6 +6,17 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+struct Curse{
+        std::string nombre;
+        std::string descripcion;
+        std::string ponentes;
+        std::string duracion;
+        std::string aforo;
+        std::string plibre;
+};
 /*
 enum Options{
     Nombre,
@@ -16,6 +27,7 @@ enum Options{
     Plazas_libres
 };
 */
+/*
 class Curso{
     private:
         std::string nombre_;
@@ -53,6 +65,12 @@ class Curso{
     void imprime_curso(std::string nombre);
     void modifica_curso(std::string nombre);
     void visualiza_cursos();
+    
 };
+*/
+void menuCursos();
+void crearCurso();
+void mostrarCursos();
+void modificarCurso();
 //Options resolver_switch(std::string aux);
 #endif

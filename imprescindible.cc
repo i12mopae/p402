@@ -1,8 +1,9 @@
 #include <iostream>
-#include <conio.h>
+//#include <conio.h>
 #include <string.h>
 #include <fstream>
 #include <stdlib.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -68,12 +69,12 @@ void Curso::menuCursos()
     } while (opcion != 5);
 }
 
-void pausa()
+/*void pausa()
 {
     cout << "Presiona Enter para continuar...";
     getch();
     system("clear");
-}
+}*/
 
 int main()
 {

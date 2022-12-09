@@ -45,13 +45,12 @@ void crearCurso(){
     fichero<<aux.plibre<<"\n";
     fichero.close();
 }
-//NO TERMINA DE FUNCIONAR
+
 void mostrarCursos(){
     std::ifstream fichero("cursos.txt", std::ifstream::in);
     std::string auxline;
-    while(!fichero.eof()){
-        std::cin.ignore();
-        getline(fichero, auxline);
+    while(getline(fichero,auxline)){
+            std::cout<<"\n";
             std::cout<<"Nombre:"<<auxline<<"\n";
             fflush(stdout);
         getline(fichero, auxline);
@@ -72,7 +71,9 @@ void mostrarCursos(){
         std::cout<<"------------------------------------------------------------------------------------";
         }
     fichero.close();
+    std::cout<<"\n";
 }
+
 //NO FUNCIONA PERO CREO QUE ESTA CERCA
 void modificarCurso(){
     std::cout<<"Introduzca el nombre del curso que desea modificar\n";

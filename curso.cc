@@ -1,19 +1,5 @@
 #include "curso.h"
 
-Curso::Curso(std::string nombre,
-        std::string descripcion,
-        std::string ponentes,
-        std::string duracion,
-        int aforo,
-        int plibre){
-            nombre_=nombre;
-            descripcion_=descripcion;
-            ponentes_=ponentes;
-            duracion_=duracion;
-            aforo_=aforo;
-            plibre_=plibre;
-        }
-
 void crearCurso(){
     std::ofstream fichero;
     fichero.open("cursos.txt", std::fstream::app);

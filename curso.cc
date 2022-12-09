@@ -74,27 +74,55 @@ void mostrarCursos(){
     std::cout<<"\n";
 }
 
-//NO FUNCIONA PERO CREO QUE ESTA CERCA
+void modificadoCurso(){
+    std::ofstream fichero;
+    fichero.open("cursosnuevo.txt", std::fstream::app);
+    Curse aux;
+    std::cout<<"Introduzca el nombre\n";
+    getline(std::cin, aux.nombre);
+    fflush(stdout);
+    fichero<<aux.nombre<<"\n";
+    std::cout<<"Introduzca descripcion\n";
+    getline(std::cin, aux.descripcion);
+    fflush(stdout);
+    fichero<<aux.descripcion<<"\n";
+    std::cout<<"Introduzca ponentes\n";
+    getline(std::cin, aux.ponentes);
+    fflush(stdout);
+    fichero<<aux.ponentes<<"\n";
+    std::cout<<"Introduzca duracion\n";
+    getline(std::cin, aux.duracion);
+    fflush(stdout);
+    fichero<<aux.duracion<<"\n";
+    std::cout<<"Introduzca numero de aforo\n";
+    getline(std::cin, aux.aforo);
+    fflush(stdout);
+    fichero<<aux.aforo<<"\n";
+    std::cout<<"Introduzca el numero de plazas disponibles\n";
+    getline(std::cin, aux.plibre);
+    fflush(stdout);
+    fichero<<aux.plibre<<"\n";
+    fichero.close();
+}
+
+
+
 void modificarCurso(){
-    std::cout<<"Introduzca el nombre del curso que desea modificar\n";
     std::string nombre;
-    getline(std::cin, nombre);
     std::string auxline;
     int n;
     std::string modificador;
-    std::ifstream fichero("cursos.txt", std::ifstream::in);
-    std::ofstream ficheronuevo;
-    ficheronuevo.open("cursosnuevo.txt", std::fstream::out);
+    std::cout<<"Introduzca el nombre del curso que desea modificar\n";
+    getline(std::cin, nombre);
+    std::ifstream fichero("cursos.txt");
+    std::ofstream ficheronuevo("cursosnuevo.txt");
     Curse aux;
-    while(!fichero.eof()){
-        std::cin.ignore();
-        getline(fichero, auxline);
+    while(getline(fichero,auxline)){
                 if(auxline==nombre){
-                            std::cout<<"Los parametros se encuentran actualmentos con los valores que se muestran a continuacion:\n";
+                            std::cout<<"Los valores actuales de los parametros del curso seleccionado se muestran a continuacion:\n";
                             std::cout<<"1.Nombre:"<<auxline<<"\n";
                             fflush(stdout);
                             aux.nombre=auxline;
-                            std::cin.ignore();
                     getline(fichero, auxline);
                         std::cout<<"2.Descripcion:"<<auxline<<"\n";
                         aux.descripcion=auxline;
@@ -115,33 +143,19 @@ void modificarCurso(){
                         std::cout<<"6.Plazas disponibles:"<<auxline<<"\n";
                         aux.plibre=auxline;
                         fflush(stdout);
-                        fichero.close();
-                        fichero.open("cursos.txt", std::ifstream::in);
-                        while(!fichero.eof()&&(auxline!=aux.nombre||auxline!=aux.descripcion||auxline!=aux.ponentes||auxline!=aux.duracion||auxline!=aux.aforo||auxline!=aux.plibre)){
-                            fflush(stdout);
-                            getline(fichero, auxline);
-                            ficheronuevo<<auxline<<"\n";
-                        }
-                        remove("cursos.txt");
-                        rename("cursos.txt", "cursosnuevo.txt");
-                        fichero.close();
-                        std::cout<<"Introduzca el curso con los nuevos datos\n";
-                        crearCurso();
-                        return;
-                }
-            fflush(stdout);
-        getline(fichero, auxline);
-            fflush(stdout);
-        getline(fichero, auxline);
-            fflush(stdout);
-        getline(fichero, auxline);
-            fflush(stdout);
-        getline(fichero, auxline);
-            fflush(stdout);
-        getline(fichero, auxline);
-            fflush(stdout);
-        }
+                }else{
+                    ficheronuevo<<auxline<<"\n";
+                } 
+    }
+    fichero.close();
+    ficheronuevo.close();
+    std::cout<<"Introduzca los nuevos datos del curso\n";
+    modificadoCurso();
+    remove("cursos.txt");
+    rename("cursosnuevo.txt", "cursos.txt");         
 }
+                    
+        
 
 void menuCursos()
 {

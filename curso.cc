@@ -1,4 +1,128 @@
 #include "curso.h"
+void llamaLogin(){
+    std::cout<<"Bienvenido/a a la sección de registro del sistema"<<"\n";
+    loginUsuario();
+}
+
+void menuUsuario(){
+    int opcion;
+    do
+    {
+        std::cout << "Menú de usuario:\n";
+        std::cout << "\t1. Visualizar cursos\n\n";
+        std::cout << "\t2. Inscribirse a curso\n";
+        std::cout << "\t3. Salir\n\n";
+        std::cout << "Teclee el numero asociado a la opcion que desea llevar a cabo...";
+        std::cin >> opcion;
+
+        system("clear");
+
+        switch (opcion)
+        {
+        case 1:
+            mostrarCursos();
+            break;
+        case 2:
+            // inscribirse();
+            break;
+        case 3:
+            system(EXIT_SUCCESS);
+            break;
+        default:
+            std::cout << "Error, ha introducido una opción no válida.\n";
+            break;
+        };
+    } while (opcion != 5);
+}
+
+void loginUsuario(){
+    bool encontrado=false;
+    std::string dni;
+    std::string contrasena;
+    std::fstream fichero;
+    fichero.open("usuariosRegistrados.txt");
+    std::string auxline;
+    std::cout<<"Introduzca su nombre de usuario\n";
+    std::cin.ignore();
+    getline(std::cin,dni);
+    fflush(stdout);
+    std::cout<<"Introduzca su contraseña\n";
+    getline(std::cin,contrasena);
+    fflush(stdout);
+    std::cin.ignore();
+    while(getline(fichero,auxline)){
+        if(auxline==dni){
+            getline(fichero,auxline);
+            if(auxline==contrasena){
+                encontrado=true;
+                std::cout<<"A continuacion se le mostrará su menu correspondiente"<<"\n";
+                //comprobar en que fichero esta y enseñar menu correspondiente
+                
+                if(dni=="1234"){
+                    fichero.close();
+                    menuCursos();//menu para coordinador de cursos
+                }
+                else{
+                    fichero.close();
+                    menuUsuario();
+                }
+            }else{
+                std::cout<<"La contraseña introducida no es correcta. Repita la operacion"<<"\n";
+                std::cout<<"\n";
+                loginUsuario();
+            } 
+        }
+                getline(fichero,auxline);
+                fflush(stdout);
+                getline(fichero,auxline);
+                fflush(stdout);
+                getline(fichero,auxline);
+                fflush(stdout);
+        std::cin.ignore();
+    }
+    if(encontrado==false){
+        std::cout<<"Usuario no encontrado, usted necesita estar previamente registrado en el sistema"<<"\n";
+        registrarUsuario();
+    }
+    fichero.close();
+}
+
+void registrarUsuario(){
+    std::ofstream fichero;
+    fichero.open("usuariosRegistrados.txt", std::fstream::app);
+    Persona aux;
+    std::cin.ignore();
+    std::cout<<"Introduzca su dni\n";
+    getline(std::cin, aux.dni);
+    fflush(stdout);
+    fichero<<aux.dni<<"\n";
+    std::cout<<"Introduzca la contraseña que desea tener para hacer login en el sistema\n";
+    getline(std::cin, aux.contrasena);
+    fflush(stdout);
+    fichero<<aux.contrasena<<"\n";
+    std::cout<<"Introduzca su nombre\n";
+    getline(std::cin, aux.nombre);
+    fflush(stdout);
+    fichero<<aux.nombre<<"\n";
+    std::cout<<"Introduzca sus apellidos\n";
+    getline(std::cin, aux.apellidos);
+    fflush(stdout);
+    fichero<<aux.apellidos<<"\n";
+    std::cout<<"Introduzca su correo electronico\n";
+    getline(std::cin, aux.correo);
+    fflush(stdout);
+    fichero<<aux.correo<<"\n";
+    fichero.close();
+    std::cout<<"\n";
+    std::cout<<"Usted se ha registrado con exito"<<"\n";
+    //std::cout<<"Su usuario es "<<aux.nombre<<"@uco.es y su contraseña "<<aux.nombre<<aux.dni<<"\n";
+    /*std::ofstream fich;
+    fich.open("login.txt", std::fstream::app);
+    fich<<aux.nombre<<"@uco.es"<<"\n";
+    fich<<aux.nombre<<aux.dni<<"\n";
+    fich.close();*/
+}
+
 
 void crearCurso(){
     std::ofstream fichero;
@@ -179,7 +303,7 @@ void menuCursos()
         default:
             std::cout << "Error, ha introducido una opción no válida.\n";
             break;
-        }
+        };
     } while (opcion != 5);
 }
 /*

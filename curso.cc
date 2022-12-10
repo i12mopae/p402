@@ -32,7 +32,7 @@ void menuUsuario(){
             std::cout << "Error, ha introducido una opción no válida.\n";
             break;
         };
-    } while (opcion != 5);
+    } while (opcion != 3);
 }
 
 void loginUsuario(){
@@ -79,6 +79,7 @@ void loginUsuario(){
                 getline(fichero,auxline);
                 fflush(stdout);
         std::cin.ignore();
+        return;
     }
     if(encontrado==false){
         std::cout<<"Usuario no encontrado, usted necesita estar previamente registrado en el sistema"<<"\n";

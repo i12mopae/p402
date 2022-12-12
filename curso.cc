@@ -42,17 +42,17 @@ void loginUsuario(){
     std::fstream fichero;
     fichero.open("usuariosRegistrados.txt");
     std::string auxline;
-    std::cout<<"Introduzca su nombre de usuario\n";
+    std::cout<<"Introduzca su dni\n";
     std::cin.ignore();
     getline(std::cin,dni);
-    fflush(stdout);
     std::cout<<"Introduzca su contraseña\n";
+    fflush(stdin);
     getline(std::cin,contrasena);
-    fflush(stdout);
-    std::cin.ignore();
-    while(getline(fichero,auxline)){
+    while(getline(fichero,auxline)&&encontrado==false){
+        fflush(stdout);
         if(auxline==dni){
             getline(fichero,auxline);
+            fflush(stdout);
             if(auxline==contrasena){
                 encontrado=true;
                 std::cout<<"A continuacion se le mostrará su menu correspondiente"<<"\n";
@@ -61,15 +61,19 @@ void loginUsuario(){
                 if(dni=="1234"){
                     fichero.close();
                     menuCursos();//menu para coordinador de cursos
+                    return;
                 }
                 else{
                     fichero.close();
                     menuUsuario();
+                    return;
                 }
-            }else{
+            }
+            else{
                 std::cout<<"La contraseña introducida no es correcta. Repita la operacion"<<"\n";
                 std::cout<<"\n";
                 loginUsuario();
+                return;
             } 
         }
                 getline(fichero,auxline);
@@ -78,8 +82,9 @@ void loginUsuario(){
                 fflush(stdout);
                 getline(fichero,auxline);
                 fflush(stdout);
-        std::cin.ignore();
-        return;
+                getline(fichero,auxline);
+                fflush(stdout);
+        //std::cin.ignore();
     }
     if(encontrado==false){
         std::cout<<"Usuario no encontrado, usted necesita estar previamente registrado en el sistema"<<"\n";

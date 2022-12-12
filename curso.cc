@@ -3,33 +3,52 @@ void llamaLogin(){
     std::cout<<"Bienvenido/a a la sección de registro del sistema"<<"\n";
     loginUsuario();
 }
-
+//ARREGLAR, NO ME CAMBIA EL NOMBRE
 void inscribirse(std::string dni){
     int plibres;
-    std::ofstream fichero;
+    mostrarCursos();
+    std::fstream fichero;
     std::string auxline;
     bool encontrado=false;
     Curse curso;
     std::cout<<"Introduzca el nombre del curso al que desea inscribirse\n";
+    std::cout<<"(Si no quedan plazas disponibles usted quedara inscrito a la lista de espera)\n";
     std::cin.ignore();
     getline(std::cin, curso.nombre);
-    curso.nombre+=".txt";
+    std::string nombref=curso.nombre;
+    nombref+=".txt";
+    fichero.open((nombref).c_str());
+    while(getline(fichero, auxline)){
+        if(auxline==dni){
+            std::cout<<"Usted ya se encuentra matriculado en este curso\n";
+            return;
+        }
+        fflush(stdout);
+    }
     fflush(stdout);
-    std::fstream fcursos;
-    fcursos.open("cursos.txt");
+    std::ifstream fcursos;
+    fcursos.open("cursos.txt", std::ios::in);
+    std:: ofstream fnuevo;
+    fnuevo.open("cursosnuevos.txt", std::fstream::app);
     while(getline(fcursos, auxline)&&encontrado==false){
         fflush(stdout);
         if(auxline==curso.nombre){
             encontrado=true;
+            curso.nombre=auxline;
             getline(fcursos, auxline);
+            curso.descripcion=auxline;
             fflush(stdout);
             getline(fcursos, auxline);
+            curso.ponentes=auxline;
             fflush(stdout);
             getline(fcursos, auxline);
+            curso.duracion=auxline;
             fflush(stdout);
             getline(fcursos, auxline);
+            curso.aforo=auxline;
             fflush(stdout);
             getline(fcursos, auxline);
+            curso.plibre=auxline;
             fflush(stdout);
             plibres=stoi(auxline);
             if(plibres>0){
@@ -52,14 +71,60 @@ void inscribirse(std::string dni){
             getline(fcursos, auxline);
             fflush(stdout);
     }
+    fcursos.close();
+    fcursos.open("cursos.txt", std::ios::in);
+    while(getline(fcursos, auxline)){
+        if(auxline==curso.nombre){
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+        }
+        else{
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+        }
+    }
+    fnuevo<<curso.nombre<<"\n";
+    fnuevo<<curso.descripcion<<"\n";
+    fnuevo<<curso.ponentes<<"\n";
+    fnuevo<<curso.duracion<<"\n";
+    fnuevo<<curso.aforo<<"\n";
+    plibres=plibres-1;
+    curso.plibre=std::to_string(plibres);
+    fnuevo<<curso.plibre<<"\n";
+    remove("cursos.txt");
+    rename("cursosnuevos.txt", "cursos.txt");
     if(encontrado==false){
         std::cout<<"ERROR, el nombre de curso que busca no se encuentra en nuestro sistema.\n";
         std::cout<<"Intentelo de nuevo teniendo cuidado con las mayusculas, minusculas y espacios.\n";
         return;
     }
-    fichero.open((curso.nombre).c_str(), std::fstream::app);
     fichero<<dni<<"\n";
     fichero.close();
+    fnuevo.close();
     fcursos.close();
 }
 
@@ -131,7 +196,6 @@ void loginUsuario(){
             else{
                 std::cout<<"La contraseña introducida no es correcta. Repita la operacion"<<"\n";
                 std::cout<<"\n";
-                loginUsuario();
                 return;
             } 
         }
@@ -153,12 +217,21 @@ void loginUsuario(){
 }
 
 void registrarUsuario(){
-    std::ofstream fichero;
-    fichero.open("usuariosRegistrados.txt", std::fstream::app);
+    std::fstream fichero;
+    std::string auxline;
+    fichero.open("usuariosRegistrados.txt");
     Persona aux;
     std::cin.ignore();
     std::cout<<"Introduzca su dni\n";
     getline(std::cin, aux.dni);
+    while(getline(fichero, auxline)){
+        if(auxline==aux.dni){
+            std::cout<<"Ya existe un usuario con ese DNI.\n El DNI es un documento identificativo unico por lo que debe contactar con el administrador si cree que se trata de un error\n";
+            return;
+        }
+    }
+    fichero.close();
+    fichero.open("usuariosRegistrados.txt", std::fstream::app);
     fflush(stdout);
     fichero<<aux.dni<<"\n";
     std::cout<<"Introduzca la contraseña que desea tener para hacer login en el sistema\n";
@@ -190,12 +263,23 @@ void registrarUsuario(){
 
 
 void crearCurso(){
-    std::ofstream fichero;
-    fichero.open("cursos.txt", std::fstream::app);
+    std::fstream fichero;
+    fichero.open("cursos.txt");
     Curse aux;
+    std::string auxline;
     std::cin.ignore();//para descartar el primer caraacter del buffer que es un salto de linea
     std::cout<<"Introduzca el nombre\n";
     getline(std::cin, aux.nombre);
+    fflush(stdout);
+    while(getline(fichero, auxline)){
+        if(auxline==aux.nombre){
+            std::cout<<"ERROR. No pueden existir dos cursos con el mismo nombre.\n";
+            return;
+        }
+        fflush(stdout);
+    }
+    fichero.close();
+    fichero.open("cursos.txt", std::fstream::app);
     fflush(stdout);
     fichero<<aux.nombre<<"\n";
     std::cout<<"Introduzca descripcion\n";
@@ -385,91 +469,3 @@ void menuCursos()
         };
     } while (opcion != 5);
 }
-/*
-void Curso::add_curso(Curso c){
-    
-    for(std::list<Curso>::iterator i=lista_curso_.begin(); i!=lista_curso_.end(); i++){
-        if(i->get_nombre()==c.get_nombre()){
-            std::cout<<"Ese curso ya está añadido a la lista\n";
-            return;
-        }
-    }
-    lista_curso_.push_back(c);
-}
-void Curso::imprime_curso(std::string nombre){
-    for(std::list<Curso>::iterator i=lista_curso_.begin(); i!=lista_curso_.end(); i++){
-        if(i->get_nombre()==nombre){
-            std::cout<<"Nombre: "<<nombre<<"\n";
-            std::cout<<"Descripcion: "<<i->get_descripcion()<<"\n";
-            std::cout<<"Ponentes: "<<i->get_ponentes()<<"\n";
-            std::cout<<"Duracion: "<<i->get_duracion()<<"\n";
-            std::cout<<"Aforo: "<<i->get_aforo()<<"\n";
-            std::cout<<"Plazas libres: "<<i->get_plibre()<<"\n";
-        }
-    }
-}
-
-void Curso::modifica_curso(std::string nombre){
-    std::cout<<"Datos actuales del curso que desea modificar:\n";
-        std::string campo;
-    for(std::list<Curso>::iterator i=lista_curso_.begin(); i!=lista_curso_.end(); i++){
-        if(i->get_nombre()==nombre){
-            std::cout<<"1.Nombre: "<<nombre<<"\n";
-            std::cout<<"2.Descripcion: "<<i->get_descripcion()<<"\n";
-            std::cout<<"3.Ponentes: "<<i->get_ponentes()<<"\n";
-            std::cout<<"4.Duracion: "<<i->get_duracion()<<"\n";
-            std::cout<<"5.Aforo: "<<i->get_aforo()<<"\n";
-            std::cout<<"6.Plazas libres: "<<i->get_plibre()<<"\n";
-            std::cout<<"Introduzca  el número del campo que desea modificar\n";
-            int campo;
-            std::cin>>campo;
-                
-                std::string modificador;
-                switch(campo){
-                    case 1:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                    case 2:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                    case 3:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                    case 4:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                    case 5:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                    case 6:
-                    std::cout<<"Introduzca  el nuevo valor\n";
-                    std::cin>>modificador;
-                    set_nombre(modificador);
-                    break;
-                };
-        }
-    }
-    std::cout<<"Cambio realizado con exito\n";
-    
-}
-void Curso::visualiza_cursos(){
-    for(std::list<Curso>::iterator i=lista_curso_.begin(); i!=lista_curso_.end(); i++){
-            std::cout<<"Nombre: "<<i->get_nombre()<<"\n";
-            std::cout<<"Descripcion: "<<i->get_descripcion()<<"\n";
-            std::cout<<"Ponentes: "<<i->get_ponentes()<<"\n";
-            std::cout<<"Duracion: "<<i->get_duracion()<<"\n";
-            std::cout<<"Aforo: "<<i->get_aforo()<<"\n";
-            std::cout<<"Plazas libres: "<<i->get_plibre()<<"\n";
-    }
-}
-*/

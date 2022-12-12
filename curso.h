@@ -32,5 +32,6 @@ void modificadoCurso();
 void llamaLogin();
 void registrarUsuario();
 void loginUsuario();
-void menuUsuario();
+void menuUsuario(std::string dni);
+void inscribirse(std::string dni);
 #endif

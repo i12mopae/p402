@@ -4,7 +4,66 @@ void llamaLogin(){
     loginUsuario();
 }
 
-void menuUsuario(){
+void inscribirse(std::string dni){
+    int plibres;
+    std::ofstream fichero;
+    std::string auxline;
+    bool encontrado=false;
+    Curse curso;
+    std::cout<<"Introduzca el nombre del curso al que desea inscribirse\n";
+    std::cin.ignore();
+    getline(std::cin, curso.nombre);
+    curso.nombre+=".txt";
+    fflush(stdout);
+    std::fstream fcursos;
+    fcursos.open("cursos.txt");
+    while(getline(fcursos, auxline)&&encontrado==false){
+        fflush(stdout);
+        if(auxline==curso.nombre){
+            encontrado=true;
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            plibres=stoi(auxline);
+            if(plibres>0){
+                    std::cout<<"Usted se ha INSCRITO con éxito.\n";
+                    std::cout<<"En breves instantes recibira un correo con las pautas que tendra que realizar para pagarlo y estar matriculado\n";
+            }
+            else{
+                std::cout<<"El aforo del curso esta completo, pero usted ha quedado inscrito en la lista de espera.\n";
+                std::cout<<"Sera notificado por correo si finalmente puede inscribirse.\n";
+            }
+        }
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+    }
+    if(encontrado==false){
+        std::cout<<"ERROR, el nombre de curso que busca no se encuentra en nuestro sistema.\n";
+        std::cout<<"Intentelo de nuevo teniendo cuidado con las mayusculas, minusculas y espacios.\n";
+        return;
+    }
+    fichero.open((curso.nombre).c_str(), std::fstream::app);
+    fichero<<dni<<"\n";
+    fichero.close();
+    fcursos.close();
+}
+
+void menuUsuario(std::string dni){
     int opcion;
     do
     {
@@ -23,7 +82,7 @@ void menuUsuario(){
             mostrarCursos();
             break;
         case 2:
-            // inscribirse();
+            inscribirse(dni);
             break;
         case 3:
             system(EXIT_SUCCESS);
@@ -65,7 +124,7 @@ void loginUsuario(){
                 }
                 else{
                     fichero.close();
-                    menuUsuario();
+                    menuUsuario(dni);
                     return;
                 }
             }
@@ -194,6 +253,7 @@ void modificadoCurso(){
     std::ofstream fichero;
     fichero.open("cursosnuevo.txt", std::fstream::app);
     Curse aux;
+   // std::cin.ignore();
     std::cout<<"Introduzca el nombre\n";
     getline(std::cin, aux.nombre);
     fflush(stdout);
@@ -224,16 +284,26 @@ void modificadoCurso(){
 
 
 void modificarCurso(){
-    std::string nombre;
+    std::string nombre="";
     std::string auxline;
     int n;
-    std::string modificador;
+    std::ifstream fichero;
+    fichero.open("cursos.txt", std::ios::in);
+    if(fichero.fail()){
+        std::cout<<"no se pudo abrir el fichero\n";
+        exit(1);
+    }
+    std::ofstream ficheronuevo;
+    ficheronuevo.open("cursosnuevo.txt", std::fstream::app);
+    std::cin.ignore();
     std::cout<<"Introduzca el nombre del curso que desea modificar\n";
     getline(std::cin, nombre);
-    std::ifstream fichero("cursos.txt");
-    std::ofstream ficheronuevo("cursosnuevo.txt");
+    fflush(stdout);
     Curse aux;
+    //std::cin.ignore();
+    
     while(getline(fichero,auxline)){
+         //std::cout<<"Los valores actuales de los parametros del curso seleccionado se muestran a continuacion:\n";
                 if(auxline==nombre){
                             std::cout<<"Los valores actuales de los parametros del curso seleccionado se muestran a continuacion:\n";
                             std::cout<<"1.Nombre:"<<auxline<<"\n";
@@ -259,13 +329,16 @@ void modificarCurso(){
                         std::cout<<"6.Plazas disponibles:"<<auxline<<"\n";
                         aux.plibre=auxline;
                         fflush(stdout);
-                }else{
+                }
+                else{
                     ficheronuevo<<auxline<<"\n";
                 } 
     }
     fichero.close();
     ficheronuevo.close();
+    //std::cin.ignore();
     std::cout<<"Introduzca los nuevos datos del curso\n";
+    
     modificadoCurso();
     remove("cursos.txt");
     rename("cursosnuevo.txt", "cursos.txt");         

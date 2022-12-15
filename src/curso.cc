@@ -1,4 +1,5 @@
 #include "curso.h"
+
 void llamaLogin(){
     std::cout<<"Bienvenido/a a la sección de registro del sistema"<<"\n";
     loginUsuario();
@@ -262,7 +263,7 @@ void registrarUsuario(){
 }
 
 
-void crearCurso(){
+bool crearCurso(){
     std::fstream fichero;
     fichero.open("cursos.txt");
     Curse aux;
@@ -274,7 +275,7 @@ void crearCurso(){
     while(getline(fichero, auxline)){
         if(auxline==aux.nombre){
             std::cout<<"ERROR. No pueden existir dos cursos con el mismo nombre.\n";
-            return;
+            return false;
         }
         fflush(stdout);
     }
@@ -303,6 +304,7 @@ void crearCurso(){
     fflush(stdout);
     fichero<<aux.plibre<<"\n";
     fichero.close();
+    return true;
 }
 
 void mostrarCursos(){
@@ -438,10 +440,9 @@ void menuCursos()
         std::cout << "\n\t\tBienvenido al programa de cursos de extensión de la UCO.\t\t\n\n";
         std::cout << "Menú del coordinador de cursos:\n";
         std::cout << "\t1. Crear curso\n\n";
-        std::cout << "\t2. Borrar curso\n\n";
-        std::cout << "\t3. Visualizar cursos\n\n";
-        std::cout << "\t4. Modificar curso\n\n";
-        std::cout << "\t5. Salir\n\n";
+        std::cout << "\t2. Visualizar cursos\n\n";
+        std::cout << "\t3. Modificar curso\n\n";
+        std::cout << "\t4. Salir\n\n";
         std::cout << "Opción: ";
         std::cin >> opcion;
 
@@ -453,19 +454,17 @@ void menuCursos()
             crearCurso();
             break;
         case 2:
-            // borrarCurso();
-            break;
-        case 3:
             mostrarCursos();
             break;
-        case 4:
+        case 3:
             modificarCurso();
-        case 5:
+        case 4:
             system(EXIT_SUCCESS);
             break;
         default:
             std::cout << "Error, ha introducido una opción no válida.\n";
             break;
         };
-    } while (opcion != 5);
+    } while (opcion != 4);
 }
+

@@ -25,7 +25,7 @@ struct Persona{
         std::string correo;
 };
 void menuCursos();
-void crearCurso();
+bool crearCurso();
 void mostrarCursos();
 void modificarCurso();
 void modificadoCurso();

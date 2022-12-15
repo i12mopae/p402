@@ -9,9 +9,6 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-
 struct Curse{
         std::string nombre;
         std::string descripcion;
@@ -31,19 +28,9 @@ void menuCursos();
 void crearCurso();
 void mostrarCursos();
 void modificarCurso();
-void modificadoCurso(std::string nombre);
-void llamaLogin();
+void modificadoCurso();
 void registrarUsuario();
-void loginUsuario();
+bool loginUsuario(std::string dni, std::string contrasena);
 void menuUsuario(std::string dni);
 void inscribirse(std::string dni);
-size_t lengthOfString(const char *s);
-bool isNumber(const std::string& str);
-void clear_cin();
 #endif
-
-
-
-
-
-

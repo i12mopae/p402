@@ -5,14 +5,32 @@ ch
 4
 1
 mates
-js
-js
-js
+g
+g
+g
 4
-0
+1
+
+
+
+
+
+-1
 quimica
 maria raya
 es la maestra
 6
 5
+-1
+filosofia
+la cueva
+enrique
+30 de septiembre al 25 de diciembre
+5
 4
+comer verduras
+tomate
+4
+30
+5
+3

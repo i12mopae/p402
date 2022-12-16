@@ -1,0 +1,704 @@
+#include "curso.h"
+#include <string>
+#include <iostream>
+#include <ctype.h>
+#include <time.h>
+#include <unistd.h>
+
+void clear_cin() {
+    std::cin.clear();
+    std::cin.ignore(80,'\n');
+}
+
+void inscribirse(std::string dni){
+    int plibres;
+    std::fstream fichero;
+    std::string auxline;
+    bool encontrado=false;
+    Curse curso;
+    std::cout<<"Introduzca el nombre del curso al que desea inscribirse\n";
+    std::cout<<"(Si no quedan plazas disponibles usted quedara inscrito a la lista de espera)\n";
+    std::cin.ignore();
+    getline(std::cin, curso.nombre);
+    while(isNumber(curso.nombre)){
+        std::cout<<"\n";
+        std::cout<<"Error, usted ha introducido un numero. Introduzca el nombre del curso en el que desee inscribirse"<<"\n";
+        getline(std::cin,curso.nombre);
+        std::cout<<"\n";
+    }
+    std::string nombref=curso.nombre;
+    nombref+=".txt";
+    fichero.open((nombref).c_str(), std::ios::out);
+    if(fichero.fail()){
+        std::cout<<"no se ha podido abrir fichero  \n";
+        exit(1);
+            }
+    while(getline(fichero, auxline)){
+        if(auxline==dni){
+            std::cout<<"Usted ya se encuentra matriculado en este curso\n";
+            return;
+        }
+        fflush(stdout);
+    }
+    fichero.close();
+    fflush(stdout);
+    std::ifstream fcursos;
+    fcursos.open("cursos.txt", std::ios::in);
+    std:: ofstream fnuevo;
+    fnuevo.open("cursosnuevos.txt", std::fstream::app);
+    while(getline(fcursos, auxline)&&encontrado==false){
+        fflush(stdout);
+        if(auxline==curso.nombre){
+            encontrado=true;
+            curso.nombre=auxline;
+            getline(fcursos, auxline);
+            curso.descripcion=auxline;
+            fflush(stdout);
+            getline(fcursos, auxline);
+            curso.ponentes=auxline;
+            fflush(stdout);
+            getline(fcursos, auxline);
+            curso.duracion=auxline;
+            fflush(stdout);
+            getline(fcursos, auxline);
+            curso.aforo=auxline;
+            fflush(stdout);
+            getline(fcursos, auxline);
+            curso.plibre=auxline;
+            fflush(stdout);
+            plibres=stoi(auxline);
+            if(plibres>0){
+                std::cout<<"\n";
+                std::cout<<"Usted se ha INSCRITO con éxito.\n";
+                std::cout<<"\n";
+                std::cout<<"En unos instantes recibira un correo con las pautas que tendra que realizar para pagarlo y estar matriculado\n";
+                std::cout<<"\n";
+            }
+            else{
+                std::cout<<"El aforo del curso esta completo, pero usted ha quedado inscrito en la lista de espera.\n";
+                std::cout<<"Sera notificado por correo si finalmente puede inscribirse.\n";
+            }
+        }
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+    }
+    fcursos.close();
+    fcursos.open("cursos.txt", std::ios::in);
+    while(getline(fcursos, auxline)){
+        if(auxline==curso.nombre){
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fflush(stdout);
+        }
+        else{
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+            getline(fcursos, auxline);
+            fnuevo<<auxline<<"\n";
+            fflush(stdout);
+        }
+    }
+    if(encontrado==false){
+        std::cout<<"ERROR, el nombre de curso que busca no se encuentra en nuestro sistema.\n";
+        std::cout<<"Intentelo de nuevo teniendo cuidado con las mayusculas, minusculas y espacios entre caracteres.\n";
+        return;
+    }
+    fnuevo<<curso.nombre<<"\n";
+    fnuevo<<curso.descripcion<<"\n";
+    fnuevo<<curso.ponentes<<"\n";
+    fnuevo<<curso.duracion<<"\n";
+    fnuevo<<curso.aforo<<"\n";
+    plibres=plibres-1;
+    curso.plibre=std::to_string(plibres);
+    fnuevo<<curso.plibre<<"\n";
+    remove("cursos.txt");
+    rename("cursosnuevos.txt", "cursos.txt");
+    fichero.open(nombref.c_str(), std::fstream::app);
+    fichero<<dni<<"\n";
+    fichero.close();
+    fnuevo.close();
+    fcursos.close();
+}
+
+
+
+void menuUsuario(std::string dni){
+    int opcion;
+    do
+    {
+        std::cout << "\t\tBienvenido al menú de usuario:\n";
+        std::cout<<"\n";
+        std::cout << "\t1. Visualizar cursos\n\n";
+        std::cout << "\t2. Inscribirse a un curso\n\n";
+        std::cout << "\t3. Retroceder al menú principal\n\n";
+        std::cout << "Teclee el numero asociado a la opcion que desea llevar a cabo...";
+        std::cin >> opcion;
+         if (std::cin.fail()){ 
+            clear_cin();
+            std::cout<<"\n";
+            std::cout<<"Error, debe introducir un numero. Intentelo de nuevo"<<"\n";
+            sleep(1.5);
+            system("clear");
+            menuUsuario(dni); 
+        }
+
+        system("clear");
+
+        switch (opcion)
+        {
+        case 1:
+            mostrarCursos();
+            std::cout<<"\n";
+            std::cout<<"\n";
+            std::cout<<"------------------------------------------------------------------------------------------\n";
+            std::cout<<"\n";
+            std::cout<<"Seleccione una opción del menu"<<"\n";
+            std::cout<<"\n";
+            break;
+        case 2:
+            mostrarCursos();
+            inscribirse(dni);
+            std::cout<<"\n";
+            std::cout<<"\n";
+            std::cout<<"------------------------------------------------------------------------------------------\n";
+            std::cout<<"\n";
+            std::cout<<"Seleccione una opción del menu"<<"\n";
+            std::cout<<"\n";
+            break;
+        case 3:
+            system(EXIT_SUCCESS);
+            break;
+        default:
+           if(opcion<0 || opcion>3){
+                std::cout << "La opción ingresada no es válida, inténtelo de nuevo\n";
+                std::cout<<"\n";
+                menuUsuario(dni);
+            }
+        };
+    } while (opcion != 3);
+}
+
+size_t lengthOfString(const char *s){
+    size_t size = 0;
+    while (*s){
+        size += 1;
+        s +=1;
+    }
+    return size;
+}
+
+bool isNumber(const std::string& str)
+{
+    return str.find_first_not_of("0123456789") == std::string::npos;
+}
+
+
+bool loginUsuario(std::string dni, std::string contrasena){
+    bool encontrado=false;
+    std::string respuesta;
+    std::fstream fichero;
+    fichero.open("usuariosRegistrados.txt");
+    std::string auxline;
+    while(lengthOfString(dni.c_str())!=9){
+        fichero.close();
+        std::cout<<"Error, el DNI introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca su dni\n";
+        getline(std::cin,dni);
+    }
+    while(isNumber(dni)){
+        std::cout<<"Error, el DNI introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca su dni\n";
+        getline(std::cin,dni);
+    }
+    std::cout<<"\n";
+    while(getline(fichero,auxline)&&encontrado==false){
+        fflush(stdout);
+        if(auxline==dni){
+            getline(fichero,auxline);
+            fflush(stdout);
+            if(auxline==contrasena){
+                encontrado=true;
+                std::cout<<"\n";
+                std::cout<<"A continuación se le mostrará su menu correspondiente"<<"\n";
+                sleep(1);
+                system("clear");
+                //comprobar en que fichero esta y enseñar menu correspondiente
+                
+                if(dni=="12345678C" && contrasena=="coordinadorcurso"){
+                    fichero.close();
+                    menuCursos();//menu para coordinador de cursos
+                    return true;
+                }
+                else{
+                    fichero.close();
+                    menuUsuario(dni);
+                    return true;
+                }
+            }
+            else{
+                std::cout<<"La contraseña introducida no es correcta. Repita la operación o seleccione la opción que desee realizar"<<"\n";
+                sleep(2);
+                system("clear");
+                return false;
+            } 
+        }
+                getline(fichero,auxline);
+                fflush(stdout);
+                getline(fichero,auxline);
+                fflush(stdout);
+                getline(fichero,auxline);
+                fflush(stdout);
+                getline(fichero,auxline);
+                fflush(stdout);
+        //std::cin.ignore();
+    }
+    if(encontrado==false){
+        std::cout<<"\n";
+        std::cout<<"Usuario no encontrado, usted necesita estar previamente registrado en el sistema"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"¿Desea acceder a esa sección? Introduzca 'Si' en caso afirmativo o 'No' si desea retroceder al menu principal"<<"\n";
+        std::cin>>respuesta;
+        while(isNumber(respuesta)){
+            std::cout<<"\n";
+            std::cout<<"Error, debe introducir 'Si' o 'No'. Inténtelo de nuevo"<<"\n";
+            getline(std::cin,respuesta);
+            std::cin.ignore();
+            std::cout<<"\n";
+        }
+        if(respuesta=="Si"){
+            std::cout<<"\n";
+            std::cout<<"A continuación, se le mostrará el formulario de registro del sistema"<<"\n";
+            sleep(2);
+            system("clear");
+            registrarUsuario();
+        }else if(respuesta=="No"){
+            sleep(1);
+            system("clear");
+            return false;
+        }
+        //sleep(1);
+        //system("clear");
+        //fichero.close();
+    }
+    fichero.close();
+    return false;
+    
+}
+
+void registrarUsuario(){
+    std::cout << "\n\t\tBienvenido/a a la sección de registro del sistema.\t\t\n\n";
+    std::fstream fichero;
+    std::string auxline;
+    fichero.open("usuariosRegistrados.txt");
+    Persona aux;
+    std::cout<<"Introduzca su dni\n";
+    std::cin.ignore();
+    getline(std::cin, aux.dni);
+    //creo que se puede quitar
+    /*while(lengthOfString(aux.dni.c_str())!=9){
+        fichero.close();
+        std::cout<<"Error, el DNI introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca su dni\n";
+        getline(std::cin,aux.dni);
+    }*/
+    while(isNumber(aux.dni)){
+        std::cout<<"Error, el DNI introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca su dni\n";
+        getline(std::cin,aux.dni);
+    }
+    while(getline(fichero, auxline)){
+        if(auxline==aux.dni){
+            std::cout<<"Ya existe un usuario con ese DNI.\n El DNI es un documento identificativo unico por lo que debe contactar con el administrador si cree que se trata de un error\n";
+            std::cout<<"\n";
+            sleep(4);
+            std::cout<<"Se le mostrará de nuevo el menú principal para que pueda seleccionar una opción"<<"\n";
+            sleep(2);
+            system("clear");
+            return;
+        }
+    }
+    fichero.close();
+    fichero.open("usuariosRegistrados.txt", std::fstream::app);
+    fflush(stdout);
+    fichero<<aux.dni<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca la contraseña que desea tener para hacer login en el sistema\n";
+    getline(std::cin, aux.contrasena);
+    fflush(stdout);
+    fichero<<aux.contrasena<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca su nombre\n";
+    getline(std::cin, aux.nombre);
+    while(isNumber(aux.nombre)){
+        std::cout<<"Error, el nombre introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca su nombre\n";
+        getline(std::cin,aux.nombre);
+    }
+    fflush(stdout);
+    fichero<<aux.nombre<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca sus apellidos\n";
+    getline(std::cin, aux.apellidos);
+    while(isNumber(aux.apellidos)){
+        std::cout<<"Error, los apellidos introducidos no son válidos. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca sus apellidos\n";
+        getline(std::cin,aux.apellidos);
+    }
+    fflush(stdout);
+    fichero<<aux.apellidos<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca su correo electronico\n";
+    getline(std::cin, aux.correo);
+    fflush(stdout);
+    fichero<<aux.correo<<"\n";
+    fichero.close();
+    std::cout<<"\n";
+    std::cout<<"Usted se ha registrado con exito"<<"\n";
+    std::cout<<"\n";
+    std::cout<<"\n";
+    std::cout<<"------------------------------------------------------------------------------------------\n";
+    std::cout<<"\n";
+    std::cout<<"Seleccione una opción del menu"<<"\n";
+    std::cout<<"\n";
+    //std::cout<<"Su usuario es "<<aux.nombre<<"@uco.es y su contraseña "<<aux.nombre<<aux.dni<<"\n";
+    /*std::ofstream fich;
+    fich.open("login.txt", std::fstream::app);
+    fich<<aux.nombre<<"@uco.es"<<"\n";
+    fich<<aux.nombre<<aux.dni<<"\n";
+    fich.close();*/
+}
+
+
+void crearCurso(){
+    std::cout<<"\n\n\t\tComplete la siguiente información para la creación del curso\n\n\t\t"<<"\n";
+    std::fstream fichero;
+    fichero.open("cursos.txt");
+    Curse aux;
+    std::string auxline;
+    std::cin.ignore();//para descartar el primer caraacter del buffer que es un salto de linea
+    std::cout<<"Introduzca el nombre del nuevo curso\n";
+    getline(std::cin, aux.nombre);
+    while(isNumber(aux.nombre)){
+        std::cout<<"Error, el nombre introducido no es válido. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca el nombre\n";
+        getline(std::cin,aux.nombre);
+    }
+    fflush(stdout);
+    while(getline(fichero, auxline)){
+        if(auxline==aux.nombre){
+            std::cout<<"ERROR. No pueden existir dos cursos con el mismo nombre. Seleccione de nuevo una opción del menú\n";
+            menuCursos();
+        }
+        fflush(stdout);
+    }
+    fichero.close();
+    fichero.open("cursos.txt", std::fstream::app);
+    fflush(stdout);
+    fichero<<aux.nombre<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca una breve descripcion del curso\n";
+    getline(std::cin, aux.descripcion);
+    while(isNumber(aux.descripcion)){
+        std::cout<<"Error, la descripción introducida no es válida. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca una breve descripción del curso\n";
+        getline(std::cin,aux.descripcion);
+    }
+    fflush(stdout);
+    fichero<<aux.descripcion<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el número ponentes que impartirán el curso\n";
+    getline(std::cin, aux.ponentes);
+    while(!isNumber(aux.ponentes)){
+        std::cout<<"Error, el número de ponentes introducido no es válido. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca el numero de ponentes que impartirán el curso\n";
+        getline(std::cin,aux.ponentes);
+    }
+    fflush(stdout);
+    fichero<<aux.ponentes<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca la duración del curso\n";
+    getline(std::cin, aux.duracion);
+    while(!isNumber(aux.duracion)){
+        std::cout<<"Error, la duración del curso introducida no es válida. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca la duración del curso\n";
+        getline(std::cin,aux.duracion);
+    }
+    fflush(stdout);
+    fichero<<aux.duracion<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el aforo del mismo\n";
+    getline(std::cin, aux.aforo);
+    while(!isNumber(aux.aforo)){
+        std::cout<<"Error, el aforo del curso introducido no es válido. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca el aforo del mismo\n";
+        getline(std::cin,aux.aforo);
+    }
+    fflush(stdout);
+    fichero<<aux.aforo<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el numero de plazas disponibles\n";
+    getline(std::cin, aux.plibre);
+    while(!isNumber(aux.plibre)){
+        std::cout<<"Error, las plazas libres introducidas no son válidas. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"Introduzca el numero de plazas disponibles\n";
+        getline(std::cin,aux.plibre);
+    }
+    fflush(stdout);
+    fichero<<aux.plibre<<"\n";
+    std::cout<<"\n";
+    std::cout<<"El curso ha sido creado con éxito. Podrá visualizarlo con el resto de cursos que había en el sistema"<<"\n";
+    fichero.close();
+}
+
+
+
+void mostrarCursos(){
+    std::cout<<"Usted se encuentra en la sección de cursos del sistema"<<"\n";
+    std::cout<<"A continuación, podrá visualizar una breve descripción sobre aquellos cursos que se encuentran actualmente en vigor"<<"\n";
+    std::ifstream fichero("cursos.txt", std::ifstream::in);
+    std::string auxline;
+    while(getline(fichero,auxline)){
+            std::cout<<"\n";
+            std::cout<<"Nombre:"<<auxline<<"\n";
+            fflush(stdout);
+        getline(fichero, auxline);
+            std::cout<<"Descripcion:"<<auxline<<"\n";
+            fflush(stdout);
+        getline(fichero, auxline);
+            std::cout<<"Ponentes:"<<auxline<<"\n";
+            fflush(stdout);
+        getline(fichero, auxline);
+            std::cout<<"Duracion:"<<auxline<<"\n";
+            fflush(stdout);
+        getline(fichero, auxline);
+            std::cout<<"Aforo:"<<auxline<<"\n";
+            fflush(stdout);
+        getline(fichero, auxline);
+            std::cout<<"Plazas disponibles:"<<auxline<<"\n";
+            fflush(stdout);
+        std::cout<<"\n";
+        }
+    fichero.close();
+}
+
+void modificadoCurso(std::string nombre){
+    std::ofstream fichero;
+    fichero.open("cursosnuevo.txt", std::fstream::app);
+    Curse aux;
+    fichero<<nombre<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca una breve descripcion del curso\n";
+    getline(std::cin, aux.descripcion);
+    while(isNumber(aux.descripcion)){
+        std::cout<<"Error, la descripción introducida no es válida. Inténtelo de nuevo"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"Introduzca una breve descripción del curso\n";
+        getline(std::cin,aux.descripcion);
+    }
+    fflush(stdout);
+    fichero<<aux.descripcion<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el número de ponentes que impartirán el curso\n";
+    getline(std::cin, aux.ponentes);
+    while(!isNumber(aux.ponentes)){
+        std::cout<<"Error, el número de ponentes introducido no es válido. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"Introduzca el numero de ponentes que impartirán el curso\n";
+        getline(std::cin,aux.ponentes);
+    }
+    fflush(stdout);
+    fichero<<aux.ponentes<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca la duración del curso\n";
+    getline(std::cin, aux.duracion);
+    while(!isNumber(aux.duracion)){
+        std::cout<<"Error, la duración del curso introducida no es válida. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"Introduzca la duracion del curso\n";
+        getline(std::cin,aux.duracion);
+    }
+    fflush(stdout);
+    fichero<<aux.duracion<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el aforo del mismo\n";
+    getline(std::cin, aux.aforo);
+    while(!isNumber(aux.aforo)){
+        std::cout<<"Error, el aforo del curso introducido no es válido. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"Introduzca el aforo del mismo\n";
+        getline(std::cin,aux.aforo);
+    }
+    fflush(stdout);
+    fichero<<aux.aforo<<"\n";
+    std::cout<<"\n";
+    std::cout<<"Introduzca el numero de plazas disponibles\n";
+    getline(std::cin, aux.plibre);
+    while(!isNumber(aux.plibre)){
+        std::cout<<"Error, las plazas libres introducidas no son válidas. Debe introducir un numero. Inténtelo de nuevo"<<"\n";
+        std::cout<<"\n";
+        std::cout<<"Introduzca el numero de plazas disponibles\n";
+        getline(std::cin,aux.plibre);
+    }
+    fflush(stdout);
+    fichero<<aux.plibre<<"\n";
+    fichero.close();
+}
+
+
+
+void modificarCurso(){
+    std::string nombre="";
+    std::string auxline;
+    int n;
+    std::ifstream fichero;
+    fichero.open("cursos.txt", std::ios::in);
+    if(fichero.fail()){
+        std::cout<<"no se pudo abrir el fichero\n";
+        exit(1);
+    }
+    std::ofstream ficheronuevo;
+    ficheronuevo.open("cursosnuevo.txt", std::fstream::app);
+    std::cin.ignore();
+    std::cout<<"Introduzca el nombre del curso que desea modificar\n";
+    getline(std::cin, nombre);
+    fflush(stdout);
+    Curse aux;
+    //std::cin.ignore();
+    
+    while(getline(fichero,auxline)){
+         //std::cout<<"Los valores actuales de los parametros del curso seleccionado se muestran a continuacion:\n";
+                if(auxline==nombre){
+                            std::cout<<"Los valores actuales de los parametros del curso seleccionado se muestran a continuacion:\n";
+                            std::cout<<"1.Nombre:"<<auxline<<"\n";
+                            fflush(stdout);
+                            aux.nombre=auxline;
+                    getline(fichero, auxline);
+                        std::cout<<"2.Descripcion:"<<auxline<<"\n";
+                        aux.descripcion=auxline;
+                        fflush(stdout);
+                    getline(fichero, auxline);
+                        std::cout<<"3.Ponentes:"<<auxline<<"\n";
+                        aux.ponentes=auxline;
+                        fflush(stdout);
+                    getline(fichero, auxline);
+                        std::cout<<"4.Duracion:"<<auxline<<"\n";
+                        aux.duracion=auxline;
+                        fflush(stdout);
+                    getline(fichero, auxline);
+                        std::cout<<"5.Aforo:"<<auxline<<"\n";
+                        aux.aforo=auxline;
+                        fflush(stdout);
+                    getline(fichero, auxline);
+                        std::cout<<"6.Plazas disponibles:"<<auxline<<"\n";
+                        aux.plibre=auxline;
+                        fflush(stdout);
+                        
+                }
+                else{
+                    ficheronuevo<<auxline<<"\n";
+                } 
+    }
+    fichero.close();
+    ficheronuevo.close();
+    //std::cin.ignore();
+    std::cout<<"\n";
+    std::cout<<"Introduzca los nuevos datos del curso\n";
+    std::cout<<"\n";
+    
+    modificadoCurso(aux.nombre);
+    remove("cursos.txt");
+    rename("cursosnuevo.txt", "cursos.txt");         
+}
+                    
+        
+
+void menuCursos()
+{
+    std::cout<<"\n";
+    int opcion;
+    std::string respuesta;
+    do
+    {
+        std::cout << "\n\t\tBienvenido al programa de cursos de extensión de la UCO.\t\t\n\n";
+        std::cout << "Menú del coordinador de cursos:\n";
+        std::cout<<"\n";
+        std::cout << "\t1. Crear curso\n\n";
+        std::cout << "\t2. Visualizar cursos\n\n";
+        std::cout << "\t3. Modificar curso\n\n";
+        std::cout << "\t4. Retroceder al menu principal\n\n";
+        std::cout << "Opción: ";
+        std::cin >> opcion;
+        if (std::cin.fail()){ 
+            clear_cin();
+            std::cout<<"\n";
+            std::cout<<"Error, debe introducir un numero. Intentelo de nuevo"<<"\n";
+            menuCursos(); 
+        }
+
+        system("clear");
+
+        switch (opcion)
+        {
+        case 1:
+            crearCurso();
+            std::cout<<"\n";
+            std::cout<<"\n";
+            std::cout<<"------------------------------------------------------------------------------------------\n";
+            std::cout<<"\n";
+            std::cout<<"Seleccione una opción del menu"<<"\n";
+            std::cout<<"\n";
+            break;
+        case 2:
+            mostrarCursos();
+            std::cout<<"\n";
+            std::cout<<"------------------------------------------------------------------------------------------\n";
+            std::cout<<"\n";
+            std::cout<<"Seleccione una opción del menu"<<"\n";
+            std::cout<<"\n";
+            break;
+        case 3:
+            modificarCurso();
+            std::cout<<"\n";
+            std::cout<<"------------------------------------------------------------------------------------------\n";
+            std::cout<<"\n";
+            std::cout<<"Seleccione una opción del menu"<<"\n";
+            std::cout<<"\n";
+            
+            break;
+        case 4:
+            system(EXIT_SUCCESS);
+            break;
+        default:
+            std::cout << "Error, ha introducido una opción no válida. Se le mostrará de nuevo el menú a continuación:\n";
+            sleep(1);
+        };
+    } while (opcion != 4);
+}

@@ -1,0 +1,43 @@
+Start testing: Dec 20 02:03 CET
+----------------------------------------------------------
+1/1 Testing: UnitTests
+1/1 Test: UnitTests
+Command: "/home/elena/myproyect/build/runUnitTests"
+Directory: /home/elena/myproyect/build
+"UnitTests" start time: Dec 20 02:03 CET
+Output:
+----------------------------------------------------------
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from registrarUsuario
+[ RUN      ] registrarUsuario.t3
+[H[2J[3J
+Usted se ha registrado con exito
+
+
+------------------------------------------------------------------------------------------
+
+Seleccione una opción del menu
+
+Ya existe un usuario con ese DNI.
+ El DNI es un documento identificativo unico por lo que debe contactar con el administrador si cree que se trata de un error
+
+Se le mostrará de nuevo el menú principal para que pueda seleccionar una opción
+Error, el DNI introducido no es válido. Inténtelo de nuevo
+Error, el nombre introducido no es válido. Inténtelo de nuevo
+Error, los apellidos introducidos no son válidos. Inténtelo de nuevo
+[       OK ] registrarUsuario.t3 (6015 ms)
+[----------] 1 test from registrarUsuario (6015 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (6015 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   6.02 sec
+----------------------------------------------------------
+Test Passed.
+"UnitTests" end time: Dec 20 02:03 CET
+"UnitTests" time elapsed: 00:00:06
+----------------------------------------------------------
+
+End testing: Dec 20 02:03 CET

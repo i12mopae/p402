@@ -1,0 +1,20 @@
+12345678A
+administrador
+Manuel
+Ramírez Osuna
+manuelramirez@gmail.com
+12345678C
+coordinadorcurso
+Antonio
+López Vera
+antoniolove@gmail.com
+12345678E
+1
+Elena
+Molero Padilla
+ele@gmail.com
+12345678B
+1
+Antonio
+Serrano Maestre
+aj@gmail.com
